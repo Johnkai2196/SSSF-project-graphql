@@ -1,8 +1,25 @@
 import {GraphQLError} from 'graphql';
 import {User, UserIdWithToken} from '../../interfaces/User';
 import LoginMessageResponse from '../../interfaces/LoginMessageResponse';
+import {Post} from '../../interfaces/Post';
 
 export default {
+  Post: {
+    user: async (parent: Post) => {
+      const response = await fetch(
+        `${process.env.AUTH_URL}/users/${parent.user}`
+      );
+      if (!response.ok) {
+        throw new GraphQLError(response.statusText, {
+          extensions: {
+            code: 'NOT_FOUND',
+          },
+        });
+      }
+      const user = (await response.json()) as User;
+      return user;
+    },
+  },
   // 1. Queries
   Query: {
     // 1.1. Get all users
