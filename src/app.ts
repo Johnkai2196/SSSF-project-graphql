@@ -12,7 +12,7 @@ import {
   ApolloServerPluginLandingPageProductionDefault,
 } from '@apollo/server/plugin/landingPage/default';
 import {notFound, errorHandler} from './middlewares';
-import authenticate from '.functions/authenticate';
+import authenticate from './functions/authenticate';
 import {MyContext} from './interfaces/MyContext';
 import {createRateLimitRule} from 'graphql-rate-limit';
 import {shield} from 'graphql-shield';

@@ -1,6 +1,4 @@
 import userResolver from './userResolver';
-import postResolver from './postResolver';
-import likeResolver from './likeResolver';
-import groupResolver from './groupResolver';
+//, postResolver, likeResolver, groupResolver]
 
-export default [userResolver, postResolver, likeResolver, groupResolver];
+export default [userResolver];
