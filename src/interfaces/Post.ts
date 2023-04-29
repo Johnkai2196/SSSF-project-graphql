@@ -7,6 +7,7 @@ interface Post extends Document {
   likes: Types.ObjectId[] | User[];
   image: string;
   group: Types.ObjectId;
+  dateAdded: Date;
 }
 
 export {Post};

@@ -74,9 +74,6 @@ export default {
   Mutation: {
     // 2.1. Register a user
     register: async (_parent: unknown, args: {user: User}) => {
-      console.log(args.user);
-      console.log(`${process.env.AUTH_URL}/users`);
-
       const response = await fetch(`${process.env.AUTH_URL}/auth/register`, {
         method: 'POST',
         headers: {
@@ -84,6 +81,7 @@ export default {
         },
         body: JSON.stringify(args.user),
       });
+
       if (!response.ok) {
         throw new GraphQLError(response.statusText, {
           extensions: {
@@ -92,6 +90,8 @@ export default {
         });
       }
       const user = (await response.json()) as LoginMessageResponse;
+      console.log(user);
+
       return user;
     },
     // 2.2 Login a user

@@ -1,0 +1,15 @@
+type Like {
+  id: ID!
+  user: User!
+  post: Post!
+}
+
+type Query {
+  likes: [Like]
+  likeById(id: ID!): Like
+}
+
+type Mutation {
+  createLike(postId: ID!): Like
+  deleteLike(id: ID!): Like
+}

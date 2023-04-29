@@ -13,7 +13,7 @@ const postModel = new mongoose.Schema<Post>({
   likes: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'Like',
       required: true,
     },
   ],
@@ -25,6 +25,10 @@ const postModel = new mongoose.Schema<Post>({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Group',
     required: true,
+  },
+  dateAdded: {
+    type: Date,
+    default: Date.now,
   },
 });
 

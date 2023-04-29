@@ -1,10 +1,16 @@
+scalar DateTime
+
 type Post {
   id: ID!
   text: String!
   user: User!
   image: String!
+  dateAdded: DateTime
 }
 
 type Query {
-  Posts: [Post]
+  posts: [Post]
+}
+type Mutation {
+  createPost(text: String!, image: String): Post
 }
