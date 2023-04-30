@@ -311,6 +311,7 @@ const deleteUser = (
           expect(deleteMessageResponse.user).toHaveProperty('bannerPicture');
           expect(deleteMessageResponse.user).toHaveProperty('bio');
           expect(deleteMessageResponse.user).not.toHaveProperty('password');
+          resolve(response.body.data.deleteUser);
         }
       });
   });
