@@ -114,6 +114,7 @@ export default {
         });
       }
       const user = (await response.json()) as LoginMessageResponse;
+
       return user;
     },
     // 2.3. Update a user

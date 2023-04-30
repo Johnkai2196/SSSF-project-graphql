@@ -1,8 +1,11 @@
 import {Document} from 'mongoose';
 interface User extends Document {
-  username: string;
+  user_name: string;
   email: string;
   password: string;
+  profilePicture: string;
+  bannerPicture: string;
+  bio: string;
 }
 
 interface UserTest {
@@ -12,6 +15,9 @@ interface UserTest {
   email?: string;
   password?: string;
   token?: string;
+  profilePicture?: string;
+  bannerPicture?: string;
+  bio?: string;
 }
 
 interface UserIdWithToken {

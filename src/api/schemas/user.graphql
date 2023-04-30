@@ -1,6 +1,6 @@
 type User {
   id: ID!
-  username: String!
+  user_name: String!
   email: String!
   profilePicture: String!
   bannerPicture: String!
@@ -19,13 +19,13 @@ input Credentials {
 }
 
 input UserInput {
-  username: String!
+  user_name: String!
   email: String!
   password: String!
 }
 
 input UserModify {
-  username: String
+  user_name: String
   email: String
   password: String
   profilePicture: String!
