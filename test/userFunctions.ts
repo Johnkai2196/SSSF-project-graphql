@@ -1,5 +1,6 @@
 //get user from grapql query users test
 
+import randomstring from 'randomstring';
 import ErrorResponse from '../src/interfaces/ErrorResponse';
 import LoginMessageResponse from '../src/interfaces/LoginMessageResponse';
 import {UserTest} from '../src/interfaces/User';
@@ -258,6 +259,7 @@ const register = (
       });
   });
 };
+
 /*mutation DeleteUser {
   deleteUser {
     message
@@ -316,5 +318,176 @@ const deleteUser = (
       });
   });
 };
+/*mutation Mutation($user: UserModify!) {
+  updateUser(user: $user) {
+    token
+    message
+    user {
+      id
+      user_name
+      email
+      profilePicture
+      bannerPicture
+      bio
+    }
+  }
+}*/
+const updateUser = (
+  url: string | Function,
+  token: string
+): Promise<LoginMessageResponse> => {
+  return new Promise((resolve, reject) => {
+    const newValue = 'Test Monkey ' + randomstring.generate(7);
+    request(url)
+      .post('/graphql')
+      .set('Content-type', 'application/json')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        query: `mutation Mutation($user: UserModify!) {
+            updateUser(user: $user) {
+                token
+                message
+                user {
+                    id
+                    user_name
+                    email
+                    profilePicture
+                    bannerPicture
+                    bio
+                }
+            }
+            }`,
+        variables: {
+          user: {
+            user_name: newValue,
+            email: newValue + '@test.com',
+            bio: newValue,
+            profilePicture: newValue,
+            bannerPicture: newValue,
+          },
+        },
+      })
+      .expect(200, (err, response) => {
+        if (err) {
+          reject(err);
+        } else {
+          const updateMessageResponse = response.body.data.updateUser;
+          expect(updateMessageResponse).toHaveProperty('message');
+          expect(updateMessageResponse).toHaveProperty('user');
+          expect(updateMessageResponse.user).toHaveProperty('id');
+          expect(updateMessageResponse.user.user_name).toBe(newValue);
+          expect(updateMessageResponse.user.email).toBe(newValue + '@test.com');
+          expect(updateMessageResponse.user.bio).toBe(newValue);
+          expect(updateMessageResponse.user.profilePicture).toBe(newValue);
+          expect(updateMessageResponse.user.bannerPicture).toBe(newValue);
+          resolve(updateMessageResponse);
+        }
+      });
+  });
+};
+/* mutation Register($user: UserInput!) {
+  register(user: $user) {
+    message
+    user {
+      id
+      user_name
+      email
+      bannerPicture
+      bio
+      profilePicture
+    }
+  }
+}*/
+const duplicateRegister = (
+  url: string | Function,
+  user: UserTest
+): Promise<ErrorResponse> => {
+  return new Promise((resolve, reject) => {
+    request(url)
+      .post('/graphql')
+      .set('Content-type', 'application/json')
+      .send({
+        query: `mutation Register($user: UserInput!) {
+            register(user: $user) {
+                message
+                user {
+                    id
+                    user_name
+                    email
+                    bannerPicture
+                    bio
+                    profilePicture
+                }
+            }
+            }`,
+        variables: {
+          user: {
+            user_name: user.user_name,
+            email: user.email,
+            password: user.password,
+          },
+        },
+      })
+      .expect(200, (err, response) => {
+        if (err) {
+          reject(err);
+        } else {
+          const registerMessageResponse = response.body.data.register;
+          expect(registerMessageResponse).toBe(null);
+          resolve(registerMessageResponse);
+        }
+      });
+  });
+};
+/*mutation DeleteUserAsAdmin($deleteUserAsAdminId: ID!) {
+  deleteUserAsAdmin(id: $deleteUserAsAdminId) {
+    message
+    user {
+      id
+    }
+  }
+}*/
+const deleteUserAsAdmin = (
+  url: string | Function,
+  id: string,
+  token: string
+): Promise<ErrorResponse> => {
+  return new Promise((resolve, reject) => {
+    request(url)
+      .post('/graphql')
+      .set('Authorization', 'Bearer ' + token)
+      .send({
+        query: `mutation DeleteUserAsAdmin($deleteUserAsAdminId: ID!) {
+          deleteUserAsAdmin(id: $deleteUserAsAdminId) {
+            user {
+              id
+            }
+          }
+        }`,
+        variables: {
+          deleteUserAsAdminId: id,
+        },
+      })
+      .expect(200, (err, response) => {
+        if (err) {
+          reject(err);
+        } else {
+          const userData = response.body.data.deleteUserAsAdmin;
+          expect(userData.user.id).toBe(id);
+          resolve(response.body.data.deleteUser);
+        }
+      });
+  });
+};
 
-export {getUser, getUsers, getUserById, login, register, deleteUser};
+export {
+  getUser,
+  getUsers,
+  getUserById,
+  login,
+  register,
+  deleteUser,
+  updateUser,
+  duplicateRegister,
+  deleteUserAsAdmin,
+};

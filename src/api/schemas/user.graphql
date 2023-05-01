@@ -28,9 +28,9 @@ input UserModify {
   user_name: String
   email: String
   password: String
-  profilePicture: String!
-  bannerPicture: String!
-  bio: String!
+  profilePicture: String
+  bannerPicture: String
+  bio: String
 }
 
 type Query {

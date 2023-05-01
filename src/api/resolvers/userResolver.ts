@@ -192,6 +192,8 @@ export default {
           },
         });
       }
+      console.log(args);
+
       const response = await fetch(`${process.env.AUTH_URL}/users/${args.id}`, {
         method: 'DELETE',
         headers: {
@@ -213,7 +215,7 @@ export default {
     // 2.6. Update a user as admin
     updateUserAsAdmin: async (
       _parent: unknown,
-      args: {user: User},
+      args: User,
       user: UserIdWithToken
     ) => {
       if (!user.token || user.role !== 'admin') {
@@ -223,17 +225,14 @@ export default {
           },
         });
       }
-      const response = await fetch(
-        `${process.env.AUTH_URL}/users/${args.user.id}`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${user.token}`,
-          },
-          body: JSON.stringify(args.user),
-        }
-      );
+      const response = await fetch(`${process.env.AUTH_URL}/users/${args.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify(args),
+      });
       if (!response.ok) {
         throw new GraphQLError(response.statusText, {
           extensions: {
@@ -241,7 +240,10 @@ export default {
           },
         });
       }
+
       const userUpdated = (await response.json()) as LoginMessageResponse;
+      console.log(userUpdated);
+
       return userUpdated;
     },
   },
