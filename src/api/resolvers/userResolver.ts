@@ -225,6 +225,8 @@ export default {
           },
         });
       }
+      console.log(args.id);
+
       const response = await fetch(`${process.env.AUTH_URL}/users/${args.id}`, {
         method: 'PUT',
         headers: {

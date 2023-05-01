@@ -8,9 +8,20 @@ type Post {
   dateAdded: DateTime
 }
 
+input PostModify {
+  text: String
+  image: String
+}
+
 type Query {
   posts: [Post]
+  postById(id: ID!): Post
+  postsByUser(userId: ID!): [Post]
 }
 type Mutation {
   createPost(text: String!, image: String): Post
+  updatePost(id: ID!, post: PostModify!): Post
+  deletePost(id: ID!): Post
+  deletePostAsAdmin(id: ID!): Post
+  updatePostAsAdmin(id: ID!, post: PostModify!): User
 }

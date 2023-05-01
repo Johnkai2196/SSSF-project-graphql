@@ -9,6 +9,7 @@ import {
   login,
   register,
   updateUser,
+  updateUserAsAdmin,
 } from './userFunctions';
 import app from '../src/app';
 import LoginMessageResponse from '../src/interfaces/LoginMessageResponse';
@@ -97,10 +98,13 @@ describe('Testing graphql api', () => {
   it('update user', async () => {
     await updateUser(app, userData.token!);
   });
+
   //test delete user
   it('delete current user', async () => {
     await deleteUser(app, userData.token!);
   });
+  //test update user as admin
+
   // test delete user as admin
   it('delete user as admin', async () => {
     await deleteUserAsAdmin(app, userData2.user.id, adminData.token!);

@@ -479,6 +479,75 @@ const deleteUserAsAdmin = (
       });
   });
 };
+/*mutation Mutation($updateUserAsAdminId: ID!, $user: UserModify!) {
+  updateUserAsAdmin(id: $updateUserAsAdminId, user: $user) {
+    token
+    message
+    user {
+      id
+      user_name
+      email
+      profilePicture
+      bannerPicture
+      bio
+    }
+  }
+} */
+const updateUserAsAdmin = (
+  url: string | Function,
+  id: string,
+  token: string
+): Promise<LoginMessageResponse> => {
+  return new Promise((resolve, reject) => {
+    const newValue = 'Test Monkey ' + randomstring.generate(7);
+    request(url)
+      .post('/graphql')
+      .set('Content-type', 'application/json')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        query: `mutation Mutation($updateUserAsAdminId: ID!, $user: UserModify!) {
+            updateUserAsAdmin(id: $updateUserAsAdminId, user: $user) {
+                token
+                message
+                user {
+                    id
+                    user_name
+                    email
+                    profilePicture
+                    bannerPicture
+                    bio
+                }
+            }
+            }`,
+        variables: {
+          updateUserAsAdminId: id,
+          user: {
+            user_name: newValue,
+            email: newValue + '@test.com',
+            bio: newValue,
+            profilePicture: newValue,
+            bannerPicture: newValue,
+          },
+        },
+      })
+      .expect(200, (err, response) => {
+        if (err) {
+          reject(err);
+        } else {
+          const updateMessageResponse = response.body.data.updateUserAsAdmin;
+          expect(updateMessageResponse).toHaveProperty('message');
+          expect(updateMessageResponse).toHaveProperty('user');
+          expect(updateMessageResponse.user).toHaveProperty('id');
+          expect(updateMessageResponse.user.user_name).toBe(newValue);
+          expect(updateMessageResponse.user.email).toBe(newValue + '@test.com');
+          expect(updateMessageResponse.user.bio).toBe(newValue);
+          expect(updateMessageResponse.user.profilePicture).toBe(newValue);
+          expect(updateMessageResponse.user.bannerPicture).toBe(newValue);
+          resolve(updateMessageResponse);
+        }
+      });
+  });
+};
 
 export {
   getUser,
@@ -490,4 +559,5 @@ export {
   updateUser,
   duplicateRegister,
   deleteUserAsAdmin,
+  updateUserAsAdmin,
 };

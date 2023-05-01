@@ -10,20 +10,8 @@ const postModel = new mongoose.Schema<Post>({
     ref: 'User',
     required: true,
   },
-  likes: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Like',
-      required: true,
-    },
-  ],
   image: {
     type: String,
-    required: true,
-  },
-  group: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Group',
     required: true,
   },
   dateAdded: {
