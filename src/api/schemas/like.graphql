@@ -10,6 +10,6 @@ type Query {
 }
 
 type Mutation {
-  createLike(postId: ID!): Like
+  createLike(post: ID!): Like
   deleteLike(id: ID!): Like
 }

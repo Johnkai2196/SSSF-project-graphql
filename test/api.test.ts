@@ -104,7 +104,9 @@ describe('Testing graphql api', () => {
     await deleteUser(app, userData.token!);
   });
   //test update user as admin
-
+  it('update user as admin', async () => {
+    await updateUserAsAdmin(app, userData2.user.id, adminData.token!);
+  });
   // test delete user as admin
   it('delete user as admin', async () => {
     await deleteUserAsAdmin(app, userData2.user.id, adminData.token!);

@@ -24,7 +24,11 @@ export default {
         });
       }
       args.user = user.id as unknown as Types.ObjectId;
+      console.log('args', args);
+
       const like = new likeModel(args);
+      console.log('like', like);
+
       return await like.save();
     },
     deleteLike: async (_parent: unknown, args: Post, user: UserIdWithToken) => {

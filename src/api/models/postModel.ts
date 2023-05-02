@@ -12,7 +12,6 @@ const postModel = new mongoose.Schema<Post>({
   },
   image: {
     type: String,
-    required: true,
   },
   dateAdded: {
     type: Date,
