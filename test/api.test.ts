@@ -14,6 +14,17 @@ import {
 import app from '../src/app';
 import LoginMessageResponse from '../src/interfaces/LoginMessageResponse';
 import jwt from 'jsonwebtoken';
+import {PostTest} from '../src/interfaces/Post';
+import {
+  createPost,
+  createPostWithoutImage,
+  deletePost,
+  postFile,
+  updatePostImage,
+  updatePostText,
+  wrongUserDeletePost,
+  wrongUserUpdatePost,
+} from './postFunction';
 
 const uploadApp = process.env.UPLOAD_URL as string;
 const adminUser: UserTest = {
@@ -98,7 +109,50 @@ describe('Testing graphql api', () => {
   it('update user', async () => {
     await updateUser(app, userData.token!);
   });
-
+  // test post
+  let postData: PostTest = {
+    text: 'test',
+    image: 'test',
+  };
+  let postID: string;
+  // test upload file
+  it('upload file', async () => {
+    await postFile(uploadApp, userData.token!);
+  });
+  // test create post
+  it('create post', async () => {
+    postData = await createPost(app, postData, userData.token!);
+    postID = postData.id!;
+  });
+  //test create post without image
+  it('create post without image', async () => {
+    await createPostWithoutImage(app, {text: 'test'}, userData.token!);
+  });
+  // test update post text
+  it('update post', async () => {
+    await updatePostText(app, {text: 'newText'}, postID, userData.token!);
+  });
+  // test update post image
+  it('update post image', async () => {
+    await updatePostImage(app, {image: 'newImage'}, postID, userData.token!);
+  });
+  //test wrong user update post
+  it('wrong user update post', async () => {
+    await wrongUserUpdatePost(
+      app,
+      {text: 'newText2'},
+      postID,
+      userData2.token!
+    );
+  });
+  // test wrong user delete post
+  it('wrong user delete post', async () => {
+    await wrongUserDeletePost(app, postID, userData2.token!);
+  });
+  // test delete post
+  it('delete post', async () => {
+    await deletePost(app, postID, userData.token!);
+  });
   //test delete user
   it('delete current user', async () => {
     await deleteUser(app, userData.token!);

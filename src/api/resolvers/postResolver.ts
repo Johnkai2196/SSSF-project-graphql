@@ -103,7 +103,7 @@ export default {
         });
       }
       const post = await postModel.findOneAndDelete({
-        id: args._id,
+        _id: args.id,
         user: user.id,
       });
       return post;

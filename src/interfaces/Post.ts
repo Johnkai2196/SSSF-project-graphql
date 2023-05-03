@@ -5,10 +5,18 @@ import {Like} from './Like';
 interface Post extends Document {
   text: string;
   user: Types.ObjectId | User;
-  likes: number;
+  likes: Types.ObjectId[] | Like[];
   image: string;
-  group: Types.ObjectId;
   dateAdded: Date;
 }
 
-export {Post};
+interface PostTest {
+  id?: string;
+  text?: string;
+  user?: Types.ObjectId | User;
+  likes?: Types.ObjectId[] | Like[];
+  image?: string;
+  dateAdded?: Date;
+}
+
+export {Post, PostTest};
