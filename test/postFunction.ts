@@ -662,8 +662,6 @@ const deletePostAsAdmin = (
           reject(err);
         } else {
           const postResponse = response.body.data.deletePostAsAdmin;
-          console.log('mnon', postResponse);
-
           expect(postResponse).toHaveProperty('text');
           expect(postResponse).toHaveProperty('image');
           expect(postResponse.user).toHaveProperty('user_name');

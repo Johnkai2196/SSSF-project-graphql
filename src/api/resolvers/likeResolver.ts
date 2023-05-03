@@ -24,10 +24,8 @@ export default {
         });
       }
       args.user = user.id as unknown as Types.ObjectId;
-      console.log('args', args);
 
       const like = new likeModel(args);
-      console.log('like', like);
 
       return await like.save();
     },
@@ -37,8 +35,6 @@ export default {
           extensions: {code: 'NOT_AUTHORIZED'},
         });
       }
-      console.log('args', args.id);
-      console.log('user', user.id);
 
       return await likeModel.findOneAndDelete({post: args.id, user: user.id});
     },

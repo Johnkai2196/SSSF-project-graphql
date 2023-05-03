@@ -220,8 +220,6 @@ const deleteLike = async (
           reject(err);
         }
         const like = res.body.data.deleteLike;
-        console.log(like);
-
         expect(like).toHaveProperty('id');
         expect(like).toHaveProperty('user');
         expect(like).toHaveProperty('post');
