@@ -1,4 +1,4 @@
-# SSSF-project-project-graphql
+# SSSF-project-graphql
 
 ## Getting started
 
