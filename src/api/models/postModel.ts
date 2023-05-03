@@ -17,6 +17,10 @@ const postModel = new mongoose.Schema<Post>({
     type: Date,
     default: Date.now,
   },
+  likes: {
+    type: Number,
+    default: 0,
+  },
 });
 
 export default mongoose.model<Post>('Post', postModel);

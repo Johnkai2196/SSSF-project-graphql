@@ -7,5 +7,10 @@ interface Like extends Document {
   user: Types.ObjectId | User;
   post: Types.ObjectId | Post;
 }
+interface LikeTest {
+  id?: Types.ObjectId;
+  user?: Types.ObjectId | User;
+  post?: Types.ObjectId | Post;
+}
 
-export {Like};
+export {Like, LikeTest};

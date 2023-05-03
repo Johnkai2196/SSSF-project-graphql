@@ -31,7 +31,18 @@ import {
   updatePostTextAsAdmin,
   updatePostTextAndImageAsAdmin,
   updatePostTextAndImage,
+  getPosts,
+  getPostById,
+  getPostsByUser,
 } from './postFunction';
+import {
+  getLikes,
+  getLikeById,
+  createLike,
+  deleteLike,
+  createLikeFail,
+} from './likeFunction';
+import {LikeTest} from '../src/interfaces/Like';
 
 const uploadApp = process.env.UPLOAD_URL as string;
 const adminUser: UserTest = {
@@ -124,6 +135,8 @@ describe('Testing graphql api', () => {
   let postData2: PostTest;
   let postID: string;
   let postID2: string;
+  let likeID: string;
+  let likeData: LikeTest;
   // test upload file
   it('upload file', async () => {
     await postFile(uploadApp, userData.token!);
@@ -132,6 +145,27 @@ describe('Testing graphql api', () => {
   it('create post', async () => {
     postData = await createPost(app, postData, userData.token!);
     postID = postData.id!;
+  });
+  // test create like
+  it('create like', async () => {
+    likeData = await createLike(app, postID, userData.token!);
+    likeID = likeData.id!.toString();
+  });
+  // test create like fail
+  it('create like fail', async () => {
+    await createLikeFail(app, postID, userData.token!);
+  });
+  // test get likes
+  it('get likes', async () => {
+    await getLikes(app);
+  });
+  // test get like by id
+  it('get like by id', async () => {
+    await getLikeById(app, likeID);
+  });
+  // test delete like
+  it('delete like', async () => {
+    await deleteLike(app, postID, userData.token!);
   });
   //test create post without image
   it('create post without image', async () => {
@@ -195,6 +229,18 @@ describe('Testing graphql api', () => {
       postID,
       userData.token!
     );
+  });
+  // should get all posts
+  it('get all posts', async () => {
+    await getPosts(app);
+  });
+  // should get post by id
+  it('get post by id', async () => {
+    await getPostById(app, postID);
+  });
+  // should get post by user id
+  it('get post by user id', async () => {
+    await getPostsByUser(app, userData.user.id);
   });
   //test wrong user update post
   it('wrong user update post', async () => {

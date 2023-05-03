@@ -37,7 +37,10 @@ export default {
           extensions: {code: 'NOT_AUTHORIZED'},
         });
       }
-      return await likeModel.findOneAndDelete({_id: args._id, user: user.id});
+      console.log('args', args.id);
+      console.log('user', user.id);
+
+      return await likeModel.findOneAndDelete({post: args.id, user: user.id});
     },
   },
 };

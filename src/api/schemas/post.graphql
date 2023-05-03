@@ -6,7 +6,7 @@ type Post {
   user: User!
   image: String
   dateAdded: DateTime
-  likes: [Like]
+  likes: Int
 }
 input PostModify {
   text: String
@@ -16,7 +16,7 @@ input PostModify {
 type Query {
   posts: [Post]
   postById(id: ID!): Post
-  postsByUser(userId: ID!): [Post]
+  postsByUser(id: ID!): [Post]
 }
 type Mutation {
   createPost(text: String!, image: String): Post

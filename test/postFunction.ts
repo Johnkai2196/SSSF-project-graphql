@@ -705,6 +705,206 @@ const notAdminDeletePost = (
       });
   });
 };
+/*query Query {
+  posts {
+    id
+    dateAdded
+    image
+    text
+    user {
+      id
+      user_name
+      email
+      profilePicture
+      bannerPicture
+      bio
+    }
+    likes
+  }
+}*/
+const getPosts = (url: string | Function): Promise<PostTest[]> => {
+  return new Promise((resolve, reject) => {
+    request(url)
+      .post('/graphql')
+      .set('Content-type', 'application/json')
+      .send({
+        query: `query Query {
+                        posts {
+                            id
+                            dateAdded
+                            image
+                            text
+                            user {
+                                id
+                                user_name
+                                email
+                                profilePicture
+                                bannerPicture
+                                bio
+                            }
+                            likes
+                        }
+                    }`,
+      })
+      .expect(200, (err, response) => {
+        if (err) {
+          reject(err);
+        } else {
+          const postsResponse = response.body.data.posts;
+          expect(postsResponse).toBeInstanceOf(Array);
+          postsResponse.forEach((post: PostTest) => {
+            expect(post).toHaveProperty('id');
+            expect(post).toHaveProperty('dateAdded');
+            expect(post).toHaveProperty('image');
+            expect(post).toHaveProperty('text');
+            expect(post).toHaveProperty('user');
+            expect(post.user).toHaveProperty('id');
+            expect(post.user).toHaveProperty('user_name');
+            expect(post.user).toHaveProperty('email');
+            expect(post.user).toHaveProperty('profilePicture');
+            expect(post.user).toHaveProperty('bannerPicture');
+            expect(post.user).toHaveProperty('bio');
+            expect(post).toHaveProperty('likes');
+          });
+          resolve(postsResponse);
+        }
+      });
+  });
+};
+/* query Query($postByIdId: ID!) {
+  postById(id: $postByIdId) {
+    id
+    text
+    user {
+      id
+      user_name
+      email
+      profilePicture
+      bannerPicture
+      bio
+    }
+    image
+    dateAdded
+    likes
+  }
+}*/
+const getPostById = (url: string | Function, id: string): Promise<PostTest> => {
+  return new Promise((resolve, reject) => {
+    request(url)
+      .post('/graphql')
+      .set('Content-type', 'application/json')
+      .send({
+        query: `query Query($postByIdId: ID!) {
+                        postById(id: $postByIdId) {
+                            id
+                            text
+                            user {
+                                id
+                                user_name
+                                email
+                                profilePicture
+                                bannerPicture
+                                bio
+                            }
+                            image
+                            dateAdded
+                            likes
+                        }
+                    }`,
+        variables: {postByIdId: id},
+      })
+      .expect(200, (err, response) => {
+        if (err) {
+          reject(err);
+        } else {
+          const postResponse = response.body.data.postById;
+          expect(postResponse).toHaveProperty('id');
+          expect(postResponse).toHaveProperty('text');
+          expect(postResponse).toHaveProperty('user');
+          expect(postResponse.user).toHaveProperty('id');
+          expect(postResponse.user).toHaveProperty('user_name');
+          expect(postResponse.user).toHaveProperty('email');
+          expect(postResponse.user).toHaveProperty('profilePicture');
+          expect(postResponse.user).toHaveProperty('bannerPicture');
+          expect(postResponse.user).toHaveProperty('bio');
+          expect(postResponse).toHaveProperty('image');
+          expect(postResponse).toHaveProperty('dateAdded');
+          expect(postResponse).toHaveProperty('likes');
+          resolve(postResponse);
+        }
+      });
+  });
+};
+/* query Query($postsByUserId: ID!) {
+  postsByUser(id: $postsByUserId) {
+    id
+    text
+    user {
+      id
+      user_name
+      email
+      profilePicture
+      bannerPicture
+      bio
+    }
+    image
+    dateAdded
+    likes
+  }
+}*/
+const getPostsByUser = (
+  url: string | Function,
+  id: string
+): Promise<PostTest[]> => {
+  return new Promise((resolve, reject) => {
+    request(url)
+      .post('/graphql')
+      .set('Content-type', 'application/json')
+      .send({
+        query: `query Query($postsByUserId: ID!) {
+                        postsByUser(id: $postsByUserId) {
+                            id
+                            text
+                            user {
+                                id
+                                user_name
+                                email
+                                profilePicture
+                                bannerPicture
+                                bio
+                            }
+                            image
+                            dateAdded
+                            likes
+                        }
+                    }`,
+        variables: {postsByUserId: id},
+      })
+      .expect(200, (err, response) => {
+        if (err) {
+          reject(err);
+        } else {
+          const postsResponse = response.body.data.postsByUser;
+          expect(postsResponse).toBeInstanceOf(Array);
+          postsResponse.forEach((post: PostTest) => {
+            expect(post).toHaveProperty('id');
+            expect(post).toHaveProperty('text');
+            expect(post).toHaveProperty('user');
+            expect(post.user).toHaveProperty('id');
+            expect(post.user).toHaveProperty('user_name');
+            expect(post.user).toHaveProperty('email');
+            expect(post.user).toHaveProperty('profilePicture');
+            expect(post.user).toHaveProperty('bannerPicture');
+            expect(post.user).toHaveProperty('bio');
+            expect(post).toHaveProperty('image');
+            expect(post).toHaveProperty('dateAdded');
+            expect(post).toHaveProperty('likes');
+          });
+          resolve(postsResponse);
+        }
+      });
+  });
+};
 
 export {
   postFile,
@@ -722,4 +922,7 @@ export {
   updatePostTextAsAdmin,
   updatePostTextAndImageAsAdmin,
   updatePostTextAndImage,
+  getPosts,
+  getPostById,
+  getPostsByUser,
 };

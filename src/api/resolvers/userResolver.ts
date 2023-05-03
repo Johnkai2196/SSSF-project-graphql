@@ -2,6 +2,8 @@ import {GraphQLError} from 'graphql';
 import {User, UserIdWithToken} from '../../interfaces/User';
 import LoginMessageResponse from '../../interfaces/LoginMessageResponse';
 import {Post} from '../../interfaces/Post';
+import postModel from '../models/postModel';
+import likeModel from '../models/likeModel';
 
 export default {
   Post: {
@@ -177,6 +179,12 @@ export default {
           },
         });
       }
+      await likeModel.deleteMany({
+        user: user.id,
+      });
+      await postModel.deleteMany({
+        user: user.id,
+      });
       const response = await fetch(`${process.env.AUTH_URL}/users`, {
         method: 'DELETE',
         headers: {
@@ -208,8 +216,13 @@ export default {
           },
         });
       }
-      console.log(args);
 
+      await likeModel.deleteMany({
+        user: args.id,
+      });
+      await postModel.deleteMany({
+        user: args.id,
+      });
       const response = await fetch(`${process.env.AUTH_URL}/users/${args.id}`, {
         method: 'DELETE',
         headers: {

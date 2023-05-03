@@ -6,7 +6,7 @@ import LoginMessageResponse from '../src/interfaces/LoginMessageResponse';
 import {UserTest} from '../src/interfaces/User';
 // eslint-disable-next-line node/no-unpublished-import
 import request from 'supertest';
-// get user from graphql query users test
+require('dotenv').config();
 
 // test for graphql query users
 /*query Query {
@@ -427,6 +427,8 @@ const deleteUserAsAdmin = (
         if (err) {
           reject(err);
         } else {
+          console.log(response.body.data.deleteUserAsAdmin);
+
           const userData = response.body.data.deleteUserAsAdmin;
           expect(userData.user.id).toBe(id);
           resolve(response.body.data.deleteUser);
@@ -454,7 +456,7 @@ const updateUserAsAdmin = (
   token: string
 ): Promise<LoginMessageResponse> => {
   return new Promise((resolve, reject) => {
-    const newValue = 'Test Monkey ' + randomstring.generate(7);
+    const newValue = 'Test Monkey 2' + randomstring.generate(7);
     request(url)
       .post('/graphql')
       .set('Content-type', 'application/json')

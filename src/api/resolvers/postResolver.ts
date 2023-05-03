@@ -16,36 +16,51 @@ export default {
     posts: async () => {
       console.log('posts');
       const posts = await postModel.find();
-      const newPosts = await Promise.all(
-        posts.map(async (post) => {
-          console.log('post', post);
-          console.log(post.id);
+      const postIds = posts.map((post) => post._id);
 
-          const likes = await likeModel.find({post: post.id}).populate('user');
-          console.log('likes', likes);
+      // Then, find all likes that match those post IDs
+      const likes = await likeModel.aggregate([
+        {$match: {post: {$in: postIds}}},
+        {$group: {_id: '$post', count: {$sum: 1}}},
+      ]);
 
-          post.likes = likes;
-          return post;
-        })
-      );
-      console.log('newPost', newPosts);
+      // Iterate over the posts and assign the likes value for each post
+      posts.forEach((post) => {
+        const like = likes.find((like) => like._id.equals(post._id));
+        post.likes = like ? like.count : 0;
+      });
 
-      return newPosts;
+      return posts;
     },
     //get post by id
     postById: async (_parent: unknown, args: Post) => {
       console.log('postById');
+
       const post = await postModel.findById(args.id);
+      if (post) {
+        // Then, find the number of likes for the post
+        const likes = await likeModel.countDocuments({post: args.id});
+
+        // Assign the likes value to the post and return it
+        post.likes = likes;
+      }
       return post;
     },
     //get posts by user
-    postsByUser: async (
-      _parent: unknown,
-      args: Post,
-      user: UserIdWithToken
-    ) => {
-      console.log('postsByUser');
-      const posts = await postModel.find({user: user.id});
+    postsByUser: async (_parent: unknown, args: Post) => {
+      const posts = await postModel.find({user: args.id});
+      const postIds = posts.map((post) => post._id);
+      // Then, find all likes that match those post IDs
+      const likes = await likeModel.aggregate([
+        {$match: {post: {$in: postIds}}},
+        {$group: {_id: '$post', count: {$sum: 1}}},
+      ]);
+
+      // Iterate over the posts and assign the likes value for each post
+      posts.forEach((post) => {
+        const like = likes.find((like) => like._id.equals(post._id));
+        post.likes = like ? like.count : 0;
+      });
       return posts;
     },
   },
