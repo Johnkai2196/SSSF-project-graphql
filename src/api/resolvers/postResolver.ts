@@ -1,6 +1,6 @@
 import {Like} from '../../interfaces/Like';
 import {Post} from '../../interfaces/Post';
-import {User, UserIdWithToken} from '../../interfaces/User';
+import {UserIdWithToken} from '../../interfaces/User';
 import postModel from '../models/postModel';
 import {GraphQLError} from 'graphql';
 import {Types} from 'mongoose';
@@ -75,12 +75,9 @@ export default {
       }
 
       args.user = user.id as unknown as Types.ObjectId;
-      console.log(args);
       const post = new postModel(args);
-      console.log(post);
 
       const result = await post.save();
-      console.log(result);
       return result;
     },
 
@@ -96,16 +93,12 @@ export default {
           extensions: {code: 'NOT_AUTHORIZED'},
         });
       }
-      console.log('arg', args);
-      console.log('postID', args.id);
-      console.log('userID', user.id);
 
       const post = await postModel.findOneAndUpdate(
         {_id: args.id, user: user.id},
         args.post,
         {new: true}
       );
-      console.log(post);
 
       return post;
     },

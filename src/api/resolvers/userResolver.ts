@@ -108,8 +108,6 @@ export default {
         });
       }
       const user = (await response.json()) as LoginMessageResponse;
-      console.log(user);
-
       return user;
     },
     // 2.2 Login a user
@@ -272,8 +270,6 @@ export default {
       }
 
       const userUpdated = (await response.json()) as LoginMessageResponse;
-      console.log(userUpdated);
-
       return userUpdated;
     },
   },

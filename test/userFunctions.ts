@@ -427,8 +427,6 @@ const deleteUserAsAdmin = (
         if (err) {
           reject(err);
         } else {
-          console.log(response.body.data.deleteUserAsAdmin);
-
           const userData = response.body.data.deleteUserAsAdmin;
           expect(userData.user.id).toBe(id);
           resolve(response.body.data.deleteUser);
