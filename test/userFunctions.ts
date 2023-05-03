@@ -6,52 +6,7 @@ import LoginMessageResponse from '../src/interfaces/LoginMessageResponse';
 import {UserTest} from '../src/interfaces/User';
 // eslint-disable-next-line node/no-unpublished-import
 import request from 'supertest';
-// get user from graphql query users
-
-/*query Query($userByIdId: ID!) {
-  userById(id: $userByIdId) {
-    id
-    user_name
-    email
-    profilePicture
-    bannerPicture
-    bio
-  }
-} */
-const getUser = (url: string | Function, id: string): Promise<UserTest> => {
-  return new Promise((resolve, reject) => {
-    request(url)
-      .post('/graphql')
-      .set('Content-type', 'application/json')
-      .send({
-        query: `query Query($userByIdId: ID!) {
-            userById(id: $userByIdId) {
-                id
-                user_name
-                email
-                profilePicture
-                bannerPicture
-                bio
-            }
-            }`,
-        variables: {userByIdId: id},
-      })
-      .expect(200, (err, response) => {
-        if (err) {
-          reject(err);
-        } else {
-          const user = response.body.data.userById;
-          expect(user).toHaveProperty('id');
-          expect(user).toHaveProperty('user_name');
-          expect(user).toHaveProperty('email');
-          expect(user).toHaveProperty('profilePicture');
-          expect(user).toHaveProperty('bannerPicture');
-          expect(user).not.toHaveProperty('password');
-          resolve(response.body.data.userById);
-        }
-      });
-  });
-};
+// get user from graphql query users test
 
 // test for graphql query users
 /*query Query {
@@ -550,7 +505,6 @@ const updateUserAsAdmin = (
 };
 
 export {
-  getUser,
   getUsers,
   getUserById,
   login,

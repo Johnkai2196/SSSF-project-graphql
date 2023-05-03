@@ -85,7 +85,7 @@ export default {
       console.log('postID', args.id);
       console.log('userID', user.id);
 
-      const post = await postModel.findByIdAndUpdate(
+      const post = await postModel.findOneAndUpdate(
         {_id: args.id, user: user.id},
         args.post,
         {new: true}
@@ -120,22 +120,23 @@ export default {
           extensions: {code: 'NOT_AUTHORIZED'},
         });
       }
+
       const post = await postModel.findByIdAndDelete(args.id);
       return post;
     },
     updatePostAsAdmin: async (
       _parent: unknown,
-      args: Post,
+      args: {id: string; post: Post},
       user: UserIdWithToken
     ) => {
-      console.log('updateAsAdmin');
-
       if (!user.token || user.role !== 'admin') {
         throw new GraphQLError('Not authorized', {
           extensions: {code: 'NOT_AUTHORIZED'},
         });
       }
-      const post = await postModel.findByIdAndUpdate(args._id);
+      const post = await postModel.findByIdAndUpdate(args.id, args.post, {
+        new: true,
+      });
       return post;
     },
   },

@@ -23,5 +23,5 @@ type Mutation {
   updatePost(id: ID!, post: PostModify!): Post
   deletePost(id: ID!): Post
   deletePostAsAdmin(id: ID!): Post
-  updatePostAsAdmin(id: ID!, post: PostModify!): User
+  updatePostAsAdmin(id: ID!, post: PostModify!): Post
 }
