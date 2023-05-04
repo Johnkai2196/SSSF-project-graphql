@@ -6,6 +6,7 @@ interface User extends Document {
   profilePicture: string;
   bannerPicture: string;
   bio: string;
+  role: string;
 }
 
 interface UserTest {
@@ -18,6 +19,7 @@ interface UserTest {
   profilePicture?: string;
   bannerPicture?: string;
   bio?: string;
+  role: string;
 }
 
 interface UserIdWithToken {

@@ -5,6 +5,7 @@ type User {
   profilePicture: String!
   bannerPicture: String!
   bio: String!
+  role: String!
 }
 
 type TokenMessage {
