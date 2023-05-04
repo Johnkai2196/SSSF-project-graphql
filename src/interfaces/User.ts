@@ -19,7 +19,7 @@ interface UserTest {
   profilePicture?: string;
   bannerPicture?: string;
   bio?: string;
-  role: string;
+  role?: string;
 }
 
 interface UserIdWithToken {
