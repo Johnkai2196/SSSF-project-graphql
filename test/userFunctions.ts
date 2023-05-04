@@ -17,6 +17,7 @@ require('dotenv').config();
     profilePicture
     bannerPicture
     bio
+    role
   }
 } */
 const getUsers = (url: string | Function): Promise<UserTest[]> => {
@@ -25,7 +26,8 @@ const getUsers = (url: string | Function): Promise<UserTest[]> => {
       .post('/graphql')
       .set('Content-type', 'application/json')
       .send({
-        query: '{users{id user_name email profilePicture bannerPicture bio}}',
+        query:
+          '{users{id user_name email profilePicture bannerPicture bio role}}',
       })
       .expect(200, (err, response) => {
         if (err) {
@@ -38,6 +40,8 @@ const getUsers = (url: string | Function): Promise<UserTest[]> => {
           expect(users[0]).toHaveProperty('email');
           expect(users[0]).toHaveProperty('profilePicture');
           expect(users[0]).toHaveProperty('bannerPicture');
+          expect(users[0]).toHaveProperty('role');
+          expect(users[0]).toHaveProperty('bio');
           expect(users[0]).not.toHaveProperty('password');
           resolve(response.body.data.users);
         }
@@ -53,6 +57,7 @@ const getUsers = (url: string | Function): Promise<UserTest[]> => {
     profilePicture
     bannerPicture
     bio
+    role
   }
 } */
 const getUserById = (url: string | Function, id: string): Promise<UserTest> => {
@@ -69,6 +74,7 @@ const getUserById = (url: string | Function, id: string): Promise<UserTest> => {
                 profilePicture
                 bannerPicture
                 bio
+                role
             }
             }`,
         variables: {userByIdId: id},
@@ -84,8 +90,72 @@ const getUserById = (url: string | Function, id: string): Promise<UserTest> => {
           expect(user).toHaveProperty('profilePicture');
           expect(user).toHaveProperty('bannerPicture');
           expect(user).toHaveProperty('bio');
+          expect(user).toHaveProperty('role');
           expect(user).not.toHaveProperty('password');
           resolve(response.body.data.userById);
+        }
+      });
+  });
+};
+/*`
+query Query {
+  checkToken {
+    token
+    message
+    user {
+      id
+      user_name
+      email
+      profilePicture
+      bannerPicture
+      bio
+      role
+    }
+  }
+}` */
+const checkToken = (
+  url: string | Function,
+  token: string
+): Promise<LoginMessageResponse> => {
+  return new Promise((resolve, reject) => {
+    request(url)
+      .post('/graphql')
+      .set('Content-type', 'application/json')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        query: `query Query {
+            checkToken {
+                token
+                message
+                user {
+                    id
+                    user_name
+                    email
+                    profilePicture
+                    bannerPicture
+                    bio
+                    role
+                }
+            }
+            }`,
+      })
+      .expect(200, (err, response) => {
+        if (err) {
+          reject(err);
+        } else {
+          const loginMessageResponse = response.body.data.checkToken;
+          expect(loginMessageResponse).toHaveProperty('token');
+          expect(loginMessageResponse).toHaveProperty('message');
+          expect(loginMessageResponse).toHaveProperty('user');
+          expect(loginMessageResponse.user).toHaveProperty('id');
+          expect(loginMessageResponse.user).toHaveProperty('user_name');
+          expect(loginMessageResponse.user).toHaveProperty('email');
+          expect(loginMessageResponse.user).toHaveProperty('profilePicture');
+          expect(loginMessageResponse.user).toHaveProperty('bannerPicture');
+          expect(loginMessageResponse.user).toHaveProperty('bio');
+          expect(loginMessageResponse.user).toHaveProperty('role');
+          expect(loginMessageResponse.user).not.toHaveProperty('password');
+          resolve(response.body.data.checkToken);
         }
       });
   });
@@ -101,6 +171,7 @@ const getUserById = (url: string | Function, id: string): Promise<UserTest> => {
       profilePicture
       bannerPicture
       bio
+      role
     }
   }
 } */
@@ -124,6 +195,7 @@ const login = (
                     profilePicture
                     bannerPicture
                     bio
+                    role
                 }
             }
             }`,
@@ -145,6 +217,7 @@ const login = (
           expect(loginMessageResponse.user).toHaveProperty('profilePicture');
           expect(loginMessageResponse.user).toHaveProperty('bannerPicture');
           expect(loginMessageResponse.user).toHaveProperty('bio');
+          expect(loginMessageResponse.user).toHaveProperty('role');
           expect(loginMessageResponse.user).not.toHaveProperty('password');
           resolve(loginMessageResponse);
         }
@@ -162,6 +235,7 @@ const login = (
       bannerPicture
       bio
       profilePicture
+      role
     }
   }
 }*/
@@ -184,6 +258,7 @@ const register = (
                     bannerPicture
                     bio
                     profilePicture
+                    role
                 }
             }
             }`,
@@ -208,6 +283,7 @@ const register = (
           expect(registerMessageResponse.user).toHaveProperty('profilePicture');
           expect(registerMessageResponse.user).toHaveProperty('bannerPicture');
           expect(registerMessageResponse.user).toHaveProperty('bio');
+          expect(registerMessageResponse.user).toHaveProperty('role');
           expect(registerMessageResponse.user).not.toHaveProperty('password');
           resolve(registerMessageResponse.user);
         }
@@ -514,4 +590,5 @@ export {
   duplicateRegister,
   deleteUserAsAdmin,
   updateUserAsAdmin,
+  checkToken,
 };

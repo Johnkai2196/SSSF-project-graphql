@@ -10,6 +10,7 @@ import {
   duplicateRegister,
   deleteUserAsAdmin,
   updateUserAsAdmin,
+  checkToken,
 } from './userFunctions';
 import app from '../src/app';
 import LoginMessageResponse from '../src/interfaces/LoginMessageResponse';
@@ -123,6 +124,11 @@ describe('Testing graphql api', () => {
   it('get user by id', async () => {
     await getUserById(app, userData.user.id);
   });
+  // test check token
+  it('check token', async () => {
+    await checkToken(app, userData.token!);
+  });
+
   // test update user
   it('update user', async () => {
     await updateUser(app, userData.token!);
