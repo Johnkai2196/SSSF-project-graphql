@@ -10,9 +10,19 @@ To get started with SSSF-project-project-graphql, follow these steps:
 4. Start the development server by running `npm run dev` in your terminal or command prompt.
 5. Run tests by running `npm run test` in your terminal or command prompt.
 
-### Usage
+## Usage
 
 To use SSSF-project-project-graphql, follow these steps:
 
 1. Start the development server by running npm run dev in your terminal or command prompt.
 2. Navigate to `http://localhost:[PORT]/graphql` in your web browser, where `[PORT]` is the port number you want to use. By default, the port number is `3000`, but you can specify a different port number by setting the `PORT` environment variable. For example, to use port number `4000`, run `PORT=4000` `npm run dev` in your terminal or command prompt.
+
+## Test
+1. Write this in the `package.json` under the word `scripts`
+```bash
+`"test": "jest --detectOpenHandles"`
+```
+2. To execute tests, you can utilize the subsequent command
+```bash
+npm test
+```
